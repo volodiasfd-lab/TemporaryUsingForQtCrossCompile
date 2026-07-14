@@ -5,11 +5,15 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: Install vcpkg and Qt6
+      - name: Install and Run vcpkg
         run: |
-          # Встановлюємо Qt6 під MinGW через vcpkg
+          # 1. Клонуємо vcpkg у поточну директорію
+          git clone https://github.com/microsoft/vcpkg.git
+          # 2. Запускаємо скрипт ініціалізації
+          .\vcpkg\bootstrap-vcpkg.bat
+          # 3. Тепер викликаємо команду встановлення
           .\vcpkg\vcpkg.exe install qt6:x64-mingw-dynamic
-        
+          
       - name: Archive vcpkg installed files
         run: |
           # Пакуємо тільки скомпільовані файли з папки installed
