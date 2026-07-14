@@ -15,7 +15,8 @@ jobs:
       - name: Install Qt6 MinGW
         run: |
           # Встановлюємо qtbase з явним зазначенням тріплету для MinGW
-          .\vcpkg\vcpkg.exe install qtbase:x64-mingw-dynamic --triplet x64-mingw-dynamic
+          .\vcpkg\vcpkg.exe update
+          .\vcpkg\vcpkg.exe install qtbase:x64-mingw-dynamic --triplet x64-mingw-dynamic --no-binarycaching
           
       - name: Archive result
         run: |
