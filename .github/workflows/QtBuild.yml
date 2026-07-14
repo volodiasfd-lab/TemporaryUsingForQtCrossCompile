@@ -1,26 +1,29 @@
-name: Get Qt6 Binaries via Vcpkg
+name: Get Qt via vcpkg
 on: [workflow_dispatch]
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: Install and Run vcpkg
+      - name: Setup vcpkg
         run: |
-          # 1. Клонуємо vcpkg у поточну директорію
+          # Клонуємо офіційний репозиторій vcpkg
           git clone https://github.com/microsoft/vcpkg.git
-          # 2. Запускаємо скрипт ініціалізації
+          # Ініціалізуємо його
           .\vcpkg\bootstrap-vcpkg.bat
-          # 3. Тепер викликаємо команду встановлення
-          .\vcpkg\vcpkg.exe install qt6:x64-mingw-dynamic
           
-      - name: Archive vcpkg installed files
+      - name: Install Qt6 MinGW
         run: |
-          # Пакуємо тільки скомпільовані файли з папки installed
-          Compress-Archive -Path vcpkg\installed\x64-mingw-dynamic\* -DestinationPath Qt6_vcpkg_MinGW.zip
-
+          # Встановлюємо qtbase з явним зазначенням тріплету для MinGW
+          .\vcpkg\vcpkg.exe install qtbase:x64-mingw-dynamic --triplet x64-mingw-dynamic
+          
+      - name: Archive result
+        run: |
+          # Пакуємо встановлені файли
+          Compress-Archive -Path vcpkg\installed\x64-mingw-dynamic\* -DestinationPath Qt6_MinGW_vcpkg.zip
+          
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Qt6-vcpkg-Binaries
-          path: Qt6_vcpkg_MinGW.zip
+          name: Qt6-MinGW-vcpkg
+          path: Qt6_MinGW_vcpkg.zip
