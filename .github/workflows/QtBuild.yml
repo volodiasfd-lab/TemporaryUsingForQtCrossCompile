@@ -14,6 +14,7 @@ jobs:
           
       - name: Install Qt6 MinGW
         run: |
+          if (Test-Path "vcpkg\buildtrees") { Remove-Item -Recurse -Force vcpkg\buildtrees }
           # Встановлюємо qtbase з явним зазначенням тріплету для MinGW
           .\vcpkg\vcpkg.exe update
           .\vcpkg\vcpkg.exe install qtbase:x64-mingw-dynamic --triplet x64-mingw-dynamic --no-binarycaching
